@@ -1,0 +1,27 @@
+<% if @certs %>
+  <table>
+    <tr class="header"><th></th><th>Status</th><th>Certname</th><th>Fingerprint</th><th>DNS Alt Names</th></tr>
+    <% even = true %>
+    <% @certs.each do |key, cert| %>
+      <tr class="<%= even ? "even":"odd" %>">
+        <td class="action">
+          <% case cert[:status] 
+             when '+' %>
+              <input type="button" class="action" name="revoke" param="<%= key %>" value="Revoke" />
+          <% when '-' %>
+              <input type="button" class="action destructive" name="clean" param="<%= key %>" value="Clean" />
+          <% else %>
+              <% p cert[:status] %>
+              <input type="button" class="action" name="sign" param="<%= key %>" value="Sign" />
+          <% end %>
+        </td>
+        <td class="status"><%= cert[:status] %></td>
+        <td class="certname"><%= key %></td>
+        <td class="fingerprint"><%= cert[:fingerprint] %></td>
+        <td class="dns_alt_names"><%= cert[:dns_alt_names] %></td>
+      </tr>
+      <% even = !even %>
+    <% end %>
+  </table>
+<% end %>
+

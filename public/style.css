@@ -1,0 +1,32 @@
+table {
+  max-width: 800px;
+  border: 1px solid #ccc;
+  background: #efefef;
+  border-spacing: 0;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
+}
+th {
+  border-bottom: 2px solid #999;
+}
+tr.even {
+  background: #b3c6ae;
+}
+td {
+  border-left: 1px solid #ddd;
+}
+td.status {
+  text-align: center;
+}
+td.action {
+  border-left: none;
+}
+td.action input:hover {
+  color: blue;
+}
+td.action input.destructive:hover {
+  background: red;
+}
+td.dns_alt_names {
+  word-wrap: break-word;
+}

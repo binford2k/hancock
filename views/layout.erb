@@ -1,0 +1,21 @@
+<html>
+<head>
+    <title>Hancock Certificate Signer</title>
+    <link rel="stylesheet" type="text/css" href="jquery-ui.css" media="all" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script type="text/javascript" src="jquery.js"></script>
+    <script type="text/javascript" src="scripts.js"></script>
+</head>
+<body>
+    <h1>Hancock Certificate Signer</h1>
+    <div id="tabs" class="ui-tabs ui-widget ui-widget-content ui-corner-all">
+      <ul class="ui-tabs-nav ui-helper-reset ui-helper-clearfix ui-widget-header ui-corner-all">
+    		<li class="ui-state-default ui-corner-top"><a href="/">Outstanding Certificate Requests</a></li>
+    		<li class="ui-state-default ui-corner-top"><a href="/list">All Known Certificates</a></li>
+    	</ul>
+    	<div id="content" class="ui-tabs-panel ui-widget-content ui-corner-bottom">
+        <%= yield %>
+    	</div>
+    </div>
+</body>
+</html>
