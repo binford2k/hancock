@@ -10,5 +10,4 @@
   * Clicky clicky
 * Command line
   * Run the puppet agent to generate certs & submit CSR
-  * `curl -k https://server:8080/autosign/\`puppet agent --fingerprint\``
-
+  * `curl -k https://server:8080/autosign/``` `puppet agent --fingerprint` `` 
