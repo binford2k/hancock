@@ -27,6 +27,11 @@ td.action input:hover {
 td.action input.destructive:hover {
   background: red;
 }
+td.label {
+  font-weight: bold;
+  font-size: 0.8em;
+  text-align: right;
+}
 td.dns_alt_names {
-  word-wrap: break-word;
+  font-size: small;
 }

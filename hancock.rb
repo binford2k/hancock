@@ -41,24 +41,31 @@ class Server  < Sinatra::Base
 
     get '/sign/:certname' do |certname|
       protected!
-      @certs = load_certs()
-      sign(certname)
+      @certs = load_certs(:all)
+      action(:sign, certname)
+    end
+
+    get '/revoke/:certname' do |certname|
+      protected!
+      @certs = load_certs(:all)
+      action(:revoke, certname)
+    end
+
+    get '/clean/:certname' do |certname|
+      protected!
+      @certs = load_certs(:all)
+      action(:clean, certname)
     end
     
     get '/autosign/:fingerprint' do |fingerprint|
       @certs = load_certs()
       begin
         host = Resolv.new.getname(request.ip)
-        puts "trying #{host}"
-        p @certs
-        p fingerprint
         if(@certs[host][:fingerprint] == fingerprint)
-          sign(host) 
-        else
-          "{\"status\":\"fail\", \"message\":\"Fingerprint doesn't match #{fingerprint}.\"}"
+          action(:sign, host) 
         end
       rescue
-        "{\"status\":\"fail\", \"message\":\"No DNS entry for #{request.ip}.\"}"
+        json(:status => :fail, :message => "Cannot sign certificate.")
       end
     end
     
@@ -68,17 +75,27 @@ class Server  < Sinatra::Base
     
     helpers do
 
-      def sign(certname)
-        puts "signing #{certname}"
+      def action(action, certname)
         if @certs.has_key?(certname)
           begin
-            %x[#{PUPPET} cert sign #{certname}]
-            "{\"status\":\"success\", \"message\":\"Signed certificate for #{certname}.\"}"
+            case action
+            when :sign
+              %x[#{PUPPET} cert sign #{certname}]
+              json(:status => :success, :message => "Signed certificate for #{certname}.")
+            when :revoke
+              %x[#{PUPPET} cert revoke #{certname}]
+              json(:status => :success, :message => "Revoked certificate for #{certname}.")
+            when :clean
+              %x[#{PUPPET} cert clean #{certname}]
+              json(:status => :success, :message => "Cleaned certificate for #{certname}.")
+            else
+              raise
+            end
           rescue
-            "{\"status\":\"fail\", \"message\":\"Signing request failed.\"}"
+            json(:status => :fail, :message => "Action failed.")
           end
         else
-          "{\"status\":\"fail\", \"message\":\"No CSR for #{certname}.\"}"
+          json(:status => :fail, :message => "No certificate for #{certname}.")
         end
       end
       
@@ -107,6 +124,13 @@ class Server  < Sinatra::Base
         end
 
         certs
+      end
+      
+      # define my own dinky jsonifier so I don't have to depend on JSON
+      def json(args)
+        str = '{'
+        args.each { |arg, val| str << "\"#{arg.to_s}\":\"#{val.to_s}\", " }
+        str.chomp!(', ') << '}'
       end
 
       # Basic auth boilerplate

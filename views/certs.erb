@@ -1,6 +1,6 @@
 <% if @certs %>
   <table>
-    <tr class="header"><th></th><th>Status</th><th>Certname</th><th>Fingerprint</th><th>DNS Alt Names</th></tr>
+    <tr class="header"><th></th><th>Status</th><th>Certname</th><th>Fingerprint</th></tr>
     <% even = true %>
     <% @certs.each do |key, cert| %>
       <tr class="<%= even ? "even":"odd" %>">
@@ -18,8 +18,13 @@
         <td class="status"><%= cert[:status] %></td>
         <td class="certname"><%= key %></td>
         <td class="fingerprint"><%= cert[:fingerprint] %></td>
-        <td class="dns_alt_names"><%= cert[:dns_alt_names] %></td>
       </tr>
+      <% if cert[:dns_alt_names] %>
+        <tr class="<%= even ? "even":"odd" %>">
+          <td colspan="2" class="label">└─ Alt Names:</td>
+          <td colspan="2" class="dns_alt_names"><%= cert[:dns_alt_names] %></td>
+        </tr>
+      <% end %>
       <% even = !even %>
     <% end %>
   </table>
