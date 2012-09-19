@@ -110,12 +110,17 @@ class Server  < Sinatra::Base
       def load_certs(format=:outstanding)
         certs = {}
         all = (format == :all ? ' --all':'')
+        master = %x[#{PUPPET} master --configprint certname].chomp
         %x[#{PUPPET} cert list #{all}].each_line do |l|
           line = l.split
+
           # normalize for cases with no status
           line.unshift(nil) if line.length < 3
+          # ignore puppet master's cert
+          next if line[1] == master
           # ignore all internal certs
           next if line[1] =~ /^pe-internal-/
+
           certs[line[1]] = {
                              :status        => line[0],
                              :fingerprint   => line[2].gsub(/[()]/, ''),
