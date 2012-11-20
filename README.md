@@ -1,4 +1,8 @@
-# Docs to come
+# This project is deprecated.
+## Please see http://puppetlabs.com/blog/whats-new-in-puppet-enterprise-2-7/
+
+This may be of limited use for Open Source Puppet, so I will not remove the project.
+However, I will not update it further and will not write more docs.
 
 * GUI
   * Generate SSL certs and drop them in /certs
